@@ -1,0 +1,18 @@
+/* 
+* Colorful Maps Admin CSS
+*/
+
+#adminmenu .toplevel_page_colorful-maps/admin .wp-menu-image img {
+	max-width: 20px;
+    max-height: 26px;
+    padding-top: 0;
+}
+
+.cm-admin-opt-form input[type='text'] {
+	width: 100%;
+	max-width: 100%;
+}
+
+.cm-admin-opt-form .image-preview {
+    object-fit: contain;
+}	
