@@ -29,8 +29,8 @@ function getAPI () {
 
   $apiUrl;
 
-  if ( null !== ( $userOpt->getValues()['api'] ) ) {
-      $apiUrl = 'https://maps.googleapis.com/maps/api/js?&key=' . $userOpt->getValues()['api'] . '&loading=async&libraries=places';
+  if ( null !== ( $userOpt->getGeneralValues()['api'] ) ) {
+      $apiUrl = 'https://maps.googleapis.com/maps/api/js?&key=' . $userOpt->getGeneralValues()['api'] . '&loading=async&libraries=places';
   } else {
       $apiUrl = 'https://maps.googleapis.com/maps/api/js?&key=0&loading=asynclibraries=places';
   };

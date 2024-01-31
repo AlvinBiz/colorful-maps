@@ -2,7 +2,6 @@
 // create custom plugin settings menu
 add_action('admin_menu', 'colorful_maps_create_menu');
 
-
 function colorful_maps_create_menu() {
 
     //create new top-level menu
@@ -10,6 +9,7 @@ function colorful_maps_create_menu() {
 
     //call register settings function
     add_action( 'admin_init', 'register_colorful_maps_settings' );
+
 }
 
 function sanitize_array( $array ) {
@@ -27,32 +27,32 @@ function register_colorful_maps_settings() {
     $administrativeArgs = array(
             'type' => 'array', 
             'sanitize_callback' => 'sanitize_array',
-            'default' => NULL,
+            'default' => array('featureType' => 'administrative'),
             );
     $landscapeArgs = array(
             'type' => 'array', 
             'sanitize_callback' => 'sanitize_array',
-            'default' => NULL,
+            'default' => array('featureType' => 'landscape'),
             );
     $poiArgs = array(
             'type' => 'array', 
             'sanitize_callback' => 'sanitize_array',
-            'default' => NULL,
+            'default' => array('featureType' => 'poi'),
             );
     $roadArgs = array(
             'type' => 'array', 
             'sanitize_callback' => 'sanitize_array',
-            'default' => NULL,
+            'default' => array('featureType' => 'road'),
             );
     $transitArgs = array(
             'type' => 'array', 
             'sanitize_callback' => 'sanitize_array',
-            'default' => NULL,
+            'default' => array('featureType' => 'transit'),
             );
     $waterArgs = array(
             'type' => 'array', 
             'sanitize_callback' => 'sanitize_array',
-            'default' => NULL,
+            'default' => array('featureType' => 'water'),
             );
 
     //register our settings
@@ -65,7 +65,9 @@ function register_colorful_maps_settings() {
     register_setting( 'colorful-maps-settings-group', 'road-styles', $roadArgs);
     register_setting( 'colorful-maps-settings-group', 'transit-styles', $transitArgs);
     register_setting( 'colorful-maps-settings-group', 'water-styles', $waterArgs);
+
 }
+
 
 function colorPickerField($option, $name, $id, $caption) {
     $field = '<td>';
@@ -102,9 +104,27 @@ function elementTypeSelectField($option, $name, $id, $caption) {
     return $select;
 }
 
+function visibilitySelectField($option, $name, $id, $caption) {
+    $select = '<td>';
+    if ($caption !== NULL) : 
+    $select .= $caption;
+    endif;
+    $select .= '<select name="' . $id . '" onchange="document.getElementById(' . $id . ').value=this.options[this.options.selectedIndex].value;">';
+    $selected = (isset( $option ) && $option === 'on') ? 'selected' : '' ;
+    $select .= '<option value="on"' . $selected . '>On</option>';
+    $selected = (isset( $option ) && $option === 'off') ? 'selected' : '' ;
+    $select .= '<option value="off"' . $selected . '>Off</option>';
+    $selected = (isset( $option ) && $option === 'simplified') ? 'selected' : '' ;
+    $select .= '<option value="simplified"' . $selected . '>Simplified</option>';
+    $select .= '</select>';
+    $select .= '<input type="hidden" id="' . $id . '" name="' . $name . '" value="' . $option . '"></td>';
+    return $select;
+}
+
 function featureTypeRows($option, $name, $id) {
     $rows = '<tr valign="top">';
     $rows .= elementTypeSelectField($option['elementType'], $name . '[elementType]', $id . '-elementtype', 'Label');
+    $rows .= visibilitySelectField($option['visibility'], $name . '[visibility]', $id . '-visibility', 'Label');
     $rows .= '</tr>';
     $rows .= '<tr valign="bottom">';
     $rows .= colorPickerField($option['color'], $name . '[color]', NULL, 'Color');
@@ -194,19 +214,19 @@ function colorful_maps_settings_page() {
             <?php echo featureTypeRows(get_option('administrative-styles'), 'administrative-styles', 'administrative-styles'); ?>
 
             <th class="section-table-header" scope="row">Administrative Country</th>
-            <?php echo featureTypeRows(get_option('administrative-styles')['country'], 'administrative-styles[country]', 'administrative-styles-country'); ?>
+            <?php echo featureTypeRows(get_option('administrative-styles')['subFeatureTypes']['country'], 'administrative-styles[subFeatureTypes][country]', 'administrative-styles-country'); ?>
             
             <th class="section-table-header" scope="row">Administrative Land Parcel</th>
-            <?php echo featureTypeRows(get_option('administrative-styles')['land-parcel'], 'administrative-styles[land-parcel]', 'administrative-styles-land-parcel'); ?>
+            <?php echo featureTypeRows(get_option('administrative-styles')['subFeatureTypes']['land_parcel'], 'administrative-styles[subFeatureTypes][land-parcel]', 'administrative-styles-land-parcel'); ?>
 
             <th class="section-table-header" scope="row">Administrative Locality</th>
-            <?php echo featureTypeRows(get_option('administrative-styles')['locality'], 'administrative-styles[locality]', 'administrative-styles-locality'); ?>
+            <?php echo featureTypeRows(get_option('administrative-styles')['subFeatureTypes']['locality'], 'administrative-styles[subFeatureTypes][locality]', 'administrative-styles-locality'); ?>
 
             <th class="section-table-header" scope="row">Administrative Neighborhood</th>
-            <?php echo featureTypeRows(get_option('administrative-styles')['neighborhood'], 'administrative-styles[neighborhood]', 'administrative-styles-neighborhood'); ?>
+            <?php echo featureTypeRows(get_option('administrative-styles')['subFeatureTypes']['neighborhood'], 'administrative-styles[subFeatureTypes][neighborhood]', 'administrative-styles-neighborhood'); ?>
 
             <th class="section-table-header" scope="row">Administrative Province</th>
-            <?php echo featureTypeRows(get_option('administrative-styles')['province'], 'administrative-styles[province]', 'administrative-styles-province'); ?>
+            <?php echo featureTypeRows(get_option('administrative-styles')['subFeatureTypes']['province'], 'administrative-styles[subFeatureTypes][province]', 'administrative-styles-province'); ?>
             </tbody>
 
             <tbody>
@@ -214,16 +234,16 @@ function colorful_maps_settings_page() {
             <?php echo featureTypeRows(get_option('landscape-styles'), 'landscape-styles', 'landscape-styles'); ?>
 
             <th class="section-table-header" scope="row">Landscape Man Made</th>
-            <?php echo featureTypeRows(get_option('landscape-styles')['man_made'], 'landscape-styles[man_made]', 'landscape-styles-man_made'); ?>
+            <?php echo featureTypeRows(get_option('landscape-styles')['subFeatureTypes']['man_made'], 'landscape-styles[subFeatureTypes][man_made]', 'landscape-styles-man_made'); ?>
             
             <th class="section-table-header" scope="row">Landscape Natural</th>
-            <?php echo featureTypeRows(get_option('landscape-styles')['natural'], 'landscape-styles[natural]', 'landscape-styles-natural'); ?>
+            <?php echo featureTypeRows(get_option('landscape-styles')['subFeatureTypes']['natural'], 'landscape-styles[subFeatureTypes][natural]', 'landscape-styles-natural'); ?>
 
             <th class="section-table-header" scope="row">Landscape Natural Landcover</th>
-            <?php echo featureTypeRows(get_option('landscape-styles')['natural']['landcover'], 'landscape-styles[natural][landcover]', 'landscape-styles-natural-landcover'); ?>
+            <?php echo featureTypeRows(get_option('landscape-styles')['subFeatureTypes']['natural']['subFeatureTypes']['landcover'], 'landscape-styles[subFeatureTypes][natural][subFeatureTypes][landcover]', 'landscape-styles-natural-landcover'); ?>
 
             <th class="section-table-header" scope="row">Landscape Natural Terrain</th>
-            <?php echo featureTypeRows(get_option('landscape-styles')['natural']['terrain'], 'landscape-styles[natural][terrain]', 'landscape-styles-natural-terrain'); ?>
+            <?php echo featureTypeRows(get_option('landscape-styles')['subFeatureTypes']['natural']['subFeatureTypes']['terrain'], 'landscape-styles[subFeatureTypes][natural][subFeatureTypes][terrain]', 'landscape-styles-natural-terrain'); ?>
             </tbody>
 
             <tbody>
@@ -231,28 +251,28 @@ function colorful_maps_settings_page() {
             <?php echo featureTypeRows(get_option('poi-styles'), 'poi-styles', 'poi-styles'); ?>
 
             <th class="section-table-header" scope="row">Poi Attraction</th>
-            <?php echo featureTypeRows(get_option('poi-styles')['attraction'], 'poi-styles[attraction]', 'poi-styles-attraction'); ?>
+            <?php echo featureTypeRows(get_option('poi-styles')['subFeatureTypes']['attraction'], 'poi-styles[subFeatureTypes][attraction]', 'poi-styles-attraction'); ?>
             
             <th class="section-table-header" scope="row">Poi Business</th>
-            <?php echo featureTypeRows(get_option('poi-styles')['business'], 'poi-styles[business]', 'poi-styles-business'); ?>
+            <?php echo featureTypeRows(get_option('poi-styles')['subFeatureTypes']['business'], 'poi-styles[subFeatureTypes][business]', 'poi-styles-business'); ?>
 
             <th class="section-table-header" scope="row">Poi Government</th>
-            <?php echo featureTypeRows(get_option('poi-styles')['government'], 'poi-styles[government]', 'poi-styles-government'); ?>
+            <?php echo featureTypeRows(get_option('poi-styles')['subFeatureTypes']['government'], 'poi-styles[subFeatureTypes][government]', 'poi-styles-government'); ?>
 
             <th class="section-table-header" scope="row">Poi Medical</th>
-            <?php echo featureTypeRows(get_option('poi-styles')['medical'], 'poi-styles[medical]', 'poi-styles-medical'); ?>
+            <?php echo featureTypeRows(get_option('poi-styles')['subFeatureTypes']['medical'], 'poi-styles[subFeatureTypes][medical]', 'poi-styles-medical'); ?>
 
             <th class="section-table-header" scope="row">Poi Park</th>
-            <?php echo featureTypeRows(get_option('poi-styles')['park'], 'poi-styles[park]', 'poi-styles-park'); ?>
+            <?php echo featureTypeRows(get_option('poi-styles')['subFeatureTypes']['park'], 'poi-styles[subFeatureTypes][park]', 'poi-styles-park'); ?>
 
             <th class="section-table-header" scope="row">Poi Place Of Worship</th>
-            <?php echo featureTypeRows(get_option('poi-styles')['place_of_worship'], 'poi-styles[place_of_worship]', 'poi-styles-place_of_worship'); ?>
+            <?php echo featureTypeRows(get_option('poi-styles')['subFeatureTypes']['place_of_worship'], 'poi-styles[subFeatureTypes][place_of_worship]', 'poi-styles-place_of_worship'); ?>
 
             <th class="section-table-header" scope="row">Poi School</th>
-            <?php echo featureTypeRows(get_option('poi-styles')['school'], 'poi-styles[school]', 'poi-styles-school'); ?>
+            <?php echo featureTypeRows(get_option('poi-styles')['subFeatureTypes']['school'], 'poi-styles[subFeatureTypes][school]', 'poi-styles-school'); ?>
 
             <th class="section-table-header" scope="row">Poi Sports Complex</th>
-            <?php echo featureTypeRows(get_option('poi-styles')['sports_complex'], 'poi-styles[sports_complex]', 'poi-styles-sports_complex'); ?>
+            <?php echo featureTypeRows(get_option('poi-styles')['subFeatureTypes']['sports_complex'], 'poi-styles[subFeatureTypes][sports_complex]', 'poi-styles-sports_complex'); ?>
             </tbody>
 
             <tbody>
@@ -260,16 +280,16 @@ function colorful_maps_settings_page() {
             <?php echo featureTypeRows(get_option('road-styles'), 'road-styles', 'road-styles'); ?>
 
             <th class="section-table-header" scope="row">Road Arterial</th>
-            <?php echo featureTypeRows(get_option('road-styles')['arterial'], 'road-styles[arterial]', 'road-styles-arterial'); ?>
+            <?php echo featureTypeRows(get_option('road-styles')['subFeatureTypes']['arterial'], 'road-styles[subFeatureTypes][arterial]', 'road-styles-arterial'); ?>
             
             <th class="section-table-header" scope="row">Road Highway</th>
-            <?php echo featureTypeRows(get_option('road-styles')['highway'], 'road-styles[highway]', 'road-styles-highway'); ?>
+            <?php echo featureTypeRows(get_option('road-styles')['subFeatureTypes']['highway'], 'road-styles[subFeatureTypes][highway]', 'road-styles-highway'); ?>
 
             <th class="section-table-header" scope="row">Road Highway Controlled Access</th>
-            <?php echo featureTypeRows(get_option('road-styles')['highway']['controlled_access'], 'road-styles[highway][controlled_access]', 'road-styles-highway-controlled_access'); ?>
+            <?php echo featureTypeRows(get_option('road-styles')['subFeatureTypes']['highway']['subFeatureTypes']['controlled_access'], 'road-styles[subFeatureTypes][highway][subFeatureTypes][controlled_access]', 'road-styles-highway-controlled_access'); ?>
 
             <th class="section-table-header" scope="row">Road Local</th>
-            <?php echo featureTypeRows(get_option('road-styles')['local'], 'road-styles[local]', 'road-styles-local'); ?>
+            <?php echo featureTypeRows(get_option('road-styles')['subFeatureTypes']['local'], 'road-styles[subFeatureTypes][local]', 'road-styles-local'); ?>
             </tbody>
 
             <tbody>
@@ -277,19 +297,19 @@ function colorful_maps_settings_page() {
             <?php echo featureTypeRows(get_option('transit-styles'), 'transit-styles', 'transit-styles'); ?>
 
             <th class="section-table-header" scope="row">Transit Line</th>
-            <?php echo featureTypeRows(get_option('transit-styles')['line'], 'transit-styles[line]', 'transit-styles-line'); ?>
+            <?php echo featureTypeRows(get_option('transit-styles')['subFeatureTypes']['line'], 'transit-styles[subFeatureTypes][line]', 'transit-styles-line'); ?>
             
             <th class="section-table-header" scope="row">Transit Station</th>
-            <?php echo featureTypeRows(get_option('transit-styles')['station'], 'transit-styles[station]', 'transit-styles-station'); ?>
+            <?php echo featureTypeRows(get_option('transit-styles')['subFeatureTypes']['station'], 'transit-styles[subFeatureTypes][station]', 'transit-styles-station'); ?>
 
             <th class="section-table-header" scope="row">Transit Station Airport</th>
-            <?php echo featureTypeRows(get_option('transit-styles')['station']['airport'], 'transit-styles[station][airport]', 'transit-styles-station-airport'); ?>
+            <?php echo featureTypeRows(get_option('transit-styles')['subFeatureTypes']['station']['subFeatureTypes']['airport'], 'transit-styles[subFeatureTypes][station][subFeatureTypes][airport]', 'transit-styles-station-airport'); ?>
 
             <th class="section-table-header" scope="row">Transit Station Bus</th>
-            <?php echo featureTypeRows(get_option('transit-styles')['station']['bus'], 'transit-styles[station][bus]', 'transit-styles-station-bus'); ?>
+            <?php echo featureTypeRows(get_option('transit-styles')['subFeatureTypes']['station']['subFeatureTypes']['bus'], 'transit-styles[subFeatureTypes][station][subFeatureTypes][bus]', 'transit-styles-station-bus'); ?>
 
             <th class="section-table-header" scope="row">Transit Station Rail</th>
-            <?php echo featureTypeRows(get_option('transit-styles')['station']['rail'], 'transit-styles[station][rail]', 'transit-styles-station-rail'); ?>
+            <?php echo featureTypeRows(get_option('transit-styles')['subFeatureTypes']['station']['subFeatureTypes']['rail'], 'transit-styles[subFeatureTypes][station][subFeatureTypes][rail]', 'transit-styles-station-rail'); ?>
             </tbody>
 
             <tbody>

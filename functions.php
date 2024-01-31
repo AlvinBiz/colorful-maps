@@ -5,9 +5,10 @@ add_action('wp_head', 'map_script');
 function map_script() {
 
 $userOpt = new UserOptions();
-$userVals = $userOpt->getValues();
+$userVals = $userOpt->getGeneralValues();
+$userStyleVals = $userOpt->getStyleValues();
 
-$userStyles = new userStyles($userVals);
+$userStyles = new userStyles($userStyleVals);
 
 ?>
 

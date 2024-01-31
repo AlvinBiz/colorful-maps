@@ -2,15 +2,54 @@
 
 class userStyles {
 
-  private $userValues;
+  private $userStyleValues;
 
   function __construct($userVals) {
-      $this->userValues = $userVals;
+      $this->userStyleValues = $userVals;
+  }
+
+  public function getStyleObject() {
+
+          $styleObject = '{"featureType":' . $feature . ','; 
+          $styleObject .= '"elementType":' . $element . ',';
+          $styleObject .= '"stylers":[';
+          $styleObject .= '"visibility":"' . $visibility . '",';
+          $styleObject .= '"color":"' . $color . '",';
+          $styleObject .= '"hue":"' . $hue . '",';
+          $styleObject .= '"lightness":"' . $lightness . '",';
+          $styleObject .= '"saturation":"' . $saturation . '",';
+          $styleObject .= '"gamma":"' . $gamma . '",';
+          $styleObject .= '"weight":"' . $weight . '",';
+          $styleObject .=']},';
+
   }
 
   public function getUserStyles() {
 
-          
+          $features = array();
+
+          foreach ($this->userStyleValues as $set) {
+            
+
+            array_push($features, $set['featureType']);
+            if (isset($set['subFeatureTypes'])) {
+              foreach($set['subFeatureTypes'] as $subFeature) {
+                $key = array_search ($subFeature, $set);
+                $subFeature = $set['featureType'] . '.' . $subFeature;
+                array_push($features, $key);
+
+                if (isset($subFeature['subFeatureTypes'])) {
+                  foreach($subFeature['subFeatureTypes'] as $bottomFeature) {
+                    $key = array_search ($bottomFeature, $subFeature);
+                    $bottomFeature = $set['featureType'] . '.' . $bottomFeature;
+                    array_push($features, $key);
+                  }
+                }
+              }
+            }
+          }
+
+          error_log($features);
 
           $output;
           $output = '[';

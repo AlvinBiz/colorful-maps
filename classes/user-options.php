@@ -2,12 +2,21 @@
 
 class UserOptions {
 
-	public function getValues() {
+	public function getGeneralValues() {
 
 		$valueArray = [
 					"address" => get_option('address'),
 					"api" => get_option('api-key'),
-					"marker-styles" => get_option('marker-styles'),
+					"marker-styles" => get_option('marker-styles')
+				];
+
+		return $valueArray;
+
+    }
+
+    public function getStyleValues() {
+
+		$valueArray = [
 					"administrative-styles" => get_option('administrative-styles'),
 					"landscape-styles" => get_option('landscape-styles'),
 					"poi-styles" => get_option('poi-styles'),
