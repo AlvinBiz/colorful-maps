@@ -2,8 +2,6 @@
 
 function display_map($atts) {
 
-	// $userStyles = new userStyles($userVals);
-	// return $userStyles->getUserStyles;
     return '<div id="colorful-map-container"></div>';
 
 }

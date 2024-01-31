@@ -75,7 +75,7 @@ add_action('wp_enqueue_scripts', 'colorful_map_scripts');
 function cm_admin_scripts() {
 
       wp_enqueue_script('colorful-admin-map', getAPI(), '', '', true);
-      wp_enqueue_style("cm-admin-css", plugin_dir_url( __FILE__ ) . "css/admin.css");
+      wp_enqueue_style("cm-admin-css", plugin_dir_url( __FILE__ ) . "css/admin.css", array(), filemtime(plugin_dir_path( __FILE__ ) . 'css/admin.css') );
       wp_enqueue_style( 'wp-color-picker' );
       wp_enqueue_script( 'wp-color-picker');
       wp_enqueue_script( 'adminscript',  plugin_dir_url( __FILE__ ) . 'js/admin.js', array( 'wp-color-picker', 'jquery' ), filemtime(plugin_dir_path( __FILE__ ) . 'js/admin.js') );
