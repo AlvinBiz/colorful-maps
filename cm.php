@@ -16,8 +16,9 @@
 require_once(dirname(__FILE__). DIRECTORY_SEPARATOR. 'classes/user-options.php');
 require_once(dirname(__FILE__). DIRECTORY_SEPARATOR. 'classes/user-styles.php');
 require_once(dirname(__FILE__). DIRECTORY_SEPARATOR. 'functions.php');
-require_once(dirname(__FILE__). DIRECTORY_SEPARATOR. 'modules/shortcodes.php');
 require_once(dirname(__FILE__). DIRECTORY_SEPARATOR. 'admin.php');
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR. 'modules/shortcodes.php');
+
 
 /**
 * Variables

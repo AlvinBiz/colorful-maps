@@ -2,6 +2,9 @@
 
 function display_map($atts) {
 
+	$arrayClass = new GetArray();
+    $conditionalOptionsArray = $arrayClass->getArray();
+
     return '<div id="colorful-map-container"></div>';
 
 }

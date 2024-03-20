@@ -20,6 +20,7 @@ $userStyles = new userStyles($userStyleVals);
 	var styles = <?php echo $userStyles->getUserStyles(); ?>;
 
 	function initMap() {
+		
 		var mapLayer = document.getElementById("colorful-map-container");
 		var centerCoordinates = new google.maps.LatLng(42.877742, -97.380979);
 
@@ -47,6 +48,7 @@ $userStyles = new userStyles($userStyleVals);
 							    glyphColor: <?php echo "'" . $userVals['marker-styles']['glyph-color'] . "'"; ?>,
 							});
 							<?php }; ?>
+
 	        	    		new google.maps.Marker({
 		            	        position: new google.maps.LatLng(latitude, longitude),
 		            	        map: map,
