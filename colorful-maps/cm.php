@@ -80,7 +80,6 @@ function cm_admin_scripts() {
       wp_enqueue_style( 'wp-color-picker' );
       wp_enqueue_script( 'wp-color-picker');
       wp_enqueue_script( 'adminscript',  plugin_dir_url( __FILE__ ) . 'js/admin.js', array( 'wp-color-picker', 'jquery' ), filemtime(plugin_dir_path( __FILE__ ) . 'js/admin.js') );
-      wp_enqueue_script('tiny-color', plugin_dir_url( __FILE__ ) . 'js/TinyColor-master/npm/cjs/tinycolor.js', '', filemtime(plugin_dir_path( __FILE__ ) . 'js/admin.js') );
 
 }
 

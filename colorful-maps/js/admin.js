@@ -3,21 +3,8 @@
   $(document).ready(function(){
     	
     	//Color picker fields
-    	$('.color-field').wpColorPicker({
-    		change: function (event, ui) {
-		        var element = event.target;
-		        var color = ui.color.toString();
+    	$('.color-field').wpColorPicker();
 
-		        var textColor = $(element).parents('tr').find('.text-color-picker');
-		        textColor.val(tinycolor(color).darken(25).toString());
-		    },
-    	});
-
-    	$('.color-field.wp-color-picker').each(function() {
-  			console.log($(this).parents('tr'));
-  			var textColor = $(this).parents('tr').find('.text-color-picker');
-		        textColor.val(tinycolor($(this).val()).darken(25).toString());
-  		})
 
     	//Address prefiller
 	 	input = document.getElementById("cm-address-input");

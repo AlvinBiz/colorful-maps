@@ -10,10 +10,6 @@ $userStyleVals = $userOpt->getStyleValues();
 
 $userStyles = new userStyles($userStyleVals);
 
-echo '<pre>';
-print_r($userStyles->getUserStyles());
-echo '</pre>';
-
 ?>
 
 <script type="text/javascript">
