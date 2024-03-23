@@ -39,25 +39,13 @@ class userStyles {
           $color = $set['color'];
           $styleObject .= '{"color":"' . $color . '"},';
           endif;
-          if (isset($set['hue'])) :
-          $hue = $set['hue'];
-          $styleObject .= '{"hue":"' . $hue . '"},';
-          endif;
           if (isset($set['lightness'])) :
           $lightness = $set['lightness'];
           $styleObject .= '{"lightness":' . $lightness . '},';
           endif;
-          if (isset($set['saturation'])) :
-          $saturation = $set['saturation'];
-          $styleObject .= '{"saturation":' . $saturation . '},';
-          endif;
-          // if (isset($set['gamma'])) :
-          // $gamma = $set['gamma'];
-          // $styleObject .= '{"gamma":' . $gamma . '},';
-          // endif;
           if (isset($set['weight'])) :
           $weight = $set['weight'];
-          $styleObject .= '{"weight":' . $weight . '},'; 
+          $styleObject .= '{"weight":' . $weight . '}'; 
           endif; 
           $styleObject .=']},';
 
@@ -68,7 +56,6 @@ class userStyles {
 
   public function getUserStyles() {
 
-            // $features = array();
             $output;
             $output = '[';
 

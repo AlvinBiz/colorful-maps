@@ -5,6 +5,7 @@
     	//Color picker fields
     	$('.color-field').wpColorPicker();
 
+
     	//Address prefiller
 	 	input = document.getElementById("cm-address-input");
 	  	searchBox = new google.maps.places.SearchBox(input);
@@ -29,7 +30,7 @@
 		// default tab
 		document.getElementById("default-tab").click();
 
-		
+
 	}); 
 
 })(jQuery)
