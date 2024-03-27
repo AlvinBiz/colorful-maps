@@ -10,7 +10,7 @@ add_action('admin_menu', 'colorful_maps_create_menu');
 function colorful_maps_create_menu() {
 
     //create new top-level menu
-    add_menu_page('Colorful Maps Settings', 'CM Settings', 'administrator', __FILE__, 'colorful_maps_settings_page' , 'dashicons-location' );
+    add_menu_page('Colorful Maps Settings', 'Colorful Maps', 'administrator', __FILE__, 'colorful_maps_settings_page' , 'dashicons-location' );
 
     //call register settings function
     add_action( 'admin_init', 'register_colorful_maps_settings' );
@@ -25,37 +25,37 @@ function sanitize_array( $array ) {
 function register_colorful_maps_settings() {
 
     $markerArgs = array(
-            'type' => 'array', 
+            'type' => 'array',
             'sanitize_callback' => 'sanitize_array',
             'default' => NULL,
             );
     $administrativeArgs = array(
-            'type' => 'array', 
+            'type' => 'array',
             'sanitize_callback' => 'sanitize_array',
             'default' => NULL,
             );
     $landscapeArgs = array(
-            'type' => 'array', 
+            'type' => 'array',
             'sanitize_callback' => 'sanitize_array',
             'default' => NULL,
             );
     $poiArgs = array(
-            'type' => 'array', 
+            'type' => 'array',
             'sanitize_callback' => 'sanitize_array',
             'default' => NULL,
             );
     $roadArgs = array(
-            'type' => 'array', 
+            'type' => 'array',
             'sanitize_callback' => 'sanitize_array',
             'default' => NULL,
             );
     $transitArgs = array(
-            'type' => 'array', 
+            'type' => 'array',
             'sanitize_callback' => 'sanitize_array',
             'default' => NULL,
             );
     $waterArgs = array(
-            'type' => 'array', 
+            'type' => 'array',
             'sanitize_callback' => 'sanitize_array',
             'default' => NULL,
             );
@@ -76,7 +76,7 @@ function register_colorful_maps_settings() {
 
 function colorPickerField($option, $name, $id, $caption) {
     $field = '<td>';
-    if ($caption !== NULL) : 
+    if ($caption !== NULL) :
     $field .= $caption;
     endif;
     $field .= '<input type="text" name="' . $name . '" value="' . esc_attr( $option ) . '" class="color-field" /></td>';
@@ -85,7 +85,7 @@ function colorPickerField($option, $name, $id, $caption) {
 
 function rangeField($option, $name, $min, $max, $step, $id, $caption) {
     $field = '<td>';
-    if ($caption !== NULL) : 
+    if ($caption !== NULL) :
     $field .= $caption;
     endif;
     $field .= '<input id="' . $id . '" name="' . $name . '" type="range" min="' . $min . '" max="' . $max . '" value="' . esc_attr( $option ) . '" step="' . $step . '" /><span class="range-result"></span></td>';
@@ -94,10 +94,10 @@ function rangeField($option, $name, $min, $max, $step, $id, $caption) {
 
 function elementTypeSelectField($option, $name, $id, $caption) {
     $select = '<td>';
-    if ($caption !== NULL) : 
+    if ($caption !== NULL) :
     $select .= $caption;
     endif;
-    if ($option == NULL) : 
+    if ($option == NULL) :
     $option = 'all';
     endif;
     $select .= '<select name="' . $id . '" onchange="document.getElementById(';
@@ -116,15 +116,15 @@ function elementTypeSelectField($option, $name, $id, $caption) {
 
 function visibilitySelectField($option, $name, $id, $caption) {
     $select = '<td>';
-    if ($caption !== NULL) : 
+    if ($caption !== NULL) :
     $select .= $caption;
     endif;
-    if ($option == NULL) : 
+    if ($option == NULL) :
     $option = 'on';
     endif;
     $select .= '<select name="' . $id . '" onchange="document.getElementById(';
     $select .= "'" . $id . "'";
-    $select .= ').value=this.options[this.options.selectedIndex].value;">'; 
+    $select .= ').value=this.options[this.options.selectedIndex].value;">';
     $selected = (isset( $option ) && $option === 'on') ? 'selected' : '' ;
     $select .= '<option value="on"' . $selected . '>On</option>';
     $selected = (isset( $option ) && $option === 'off') ? 'selected' : '' ;
@@ -175,7 +175,7 @@ function colorful_maps_settings_page() {
     <?php wp_enqueue_media(); ?>
 
     <div id="general-settings" class="tabcontent">
-        <h3>Map Settings</h3> 
+        <h3>Map Settings</h3>
         <table class="form-table">
             <tbody>
             <tr valign="top">
@@ -191,9 +191,9 @@ function colorful_maps_settings_page() {
             </tbody>
         </table>
     </div>
-        
+
     <div id="marker-styles" class="tabcontent">
-        <h3>Marker Options</h3> 
+        <h3>Marker Options</h3>
         <table class="form-table">
             <tbody>
             <tr valign="top">
@@ -212,69 +212,69 @@ function colorful_maps_settings_page() {
             </div>
             <input id="upload_image_button" type="button" class="button" value=<?php '"' . _e( 'Upload image' ) . '"'; ?> />
             <input type='hidden' name='marker-styles[image]' id='marker-image' value="<?php if (is_array(get_option('marker-styles')) && isset(get_option('marker-styles')['image'])) echo esc_attr(get_option('marker-styles')['image']); ?>">
-            <p>Image should be no larger than 80px by 80px.</p> 
-            <p>Other marker styles will not be applies when a marker image is set.</p> 
+            <p>Image should be no larger than 80px by 80px.</p>
+            <p>Other marker styles will not be applies when a marker image is set.</p>
             </td>
             </tr>
             <tr valign="top">
             <th scope="row">Marker Scale</th>
-            <?php 
-            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['scale']) : 
+            <?php
+            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['scale']) :
             $scale = get_option('marker-styles')['scale'];
             else : $scale = NULL;
-            endif;      
-            echo rangeField($scale, 'marker-styles[scale]', 1, 3, 0.25, 'marker-range', NULL); 
+            endif;
+            echo rangeField($scale, 'marker-styles[scale]', 1, 3, 0.25, 'marker-range', NULL);
             ?>
             </tr>
             <tr valign="top">
             <th scope="row">Marker Background Color</th>
-            <?php 
-            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['bg-color']) : 
+            <?php
+            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['bg-color']) :
             $background = get_option('marker-styles')['bg-color'];
             else : $background = NULL;
-            endif;  
+            endif;
             echo colorPickerField($background, 'marker-styles[bg-color]', NULL, NULL); ?>
-            <?php 
-            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['scale']) : 
+            <?php
+            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['scale']) :
             $scale = get_option('marker-styles')['scale'];
             else : $scale = NULL;
-            endif;      
-            echo rangeField($scale, 'marker-styles[scale]', 1, 3, 0.25, 'marker-range', NULL); 
+            endif;
+            echo rangeField($scale, 'marker-styles[scale]', 1, 3, 0.25, 'marker-range', NULL);
             ?>
             </tr>
             <tr valign="top">
             <th scope="row">Marker Border Color</th>
-            <?php 
-            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['border-color']) : 
+            <?php
+            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['border-color']) :
             $border = get_option('marker-styles')['border-color'];
             else : $border = NULL;
-            endif;      
-            echo colorPickerField($border, 'marker-styles[border-color]', NULL, NULL);     
+            endif;
+            echo colorPickerField($border, 'marker-styles[border-color]', NULL, NULL);
             ?>
             </tr>
             <tr valign="top">
             <th scope="row">Marker Glyph Color</th>
-            <?php 
-            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['glyph-color']) : 
+            <?php
+            if (is_array(get_option('marker-styles')) && get_option('marker-styles')['glyph-color']) :
             $glyphColor = get_option('marker-styles')['glyph-color'];
             else : $glyphColor = NULL;
-            endif;      
-            echo colorPickerField($glyphColor, 'marker-styles[glyph-color]', NULL, NULL); 
+            endif;
+            echo colorPickerField($glyphColor, 'marker-styles[glyph-color]', NULL, NULL);
             ?>
             </tr>
             </tbody>
         </table>
     </div>
     <div id="map-styles" class="tabcontent">
-        <h3>Map Options</h3> 
+        <h3>Map Options</h3>
         <table class="form-table">
             <tbody>
-            <?php 
+            <?php
 
                 $arrayClass = new GetArray();
 
                 $conditionalOptionsArray = $arrayClass->getArray();
-                
+
                 foreach($conditionalOptionsArray as $optionKey => $option) {
                     echo '<th class="section-table-header" scope="row">' . $optionKey . '</th>';
                     echo featureTypeRows($option['getOption'], $option['name'], $option['id'], $option['featureType']);
@@ -283,7 +283,7 @@ function colorful_maps_settings_page() {
             ?>
             </tbody>
 
-            
+
         </table>
     </div>
     <?php submit_button(); ?>
