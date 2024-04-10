@@ -161,7 +161,7 @@ function featureTypeRows($option, $name, $id, $ft) {
 function colorful_maps_settings_page() {
 ?>
 <div class="wrap">
-<h1>Colorful Maps Plugin</h1>
+<div class="plugin-header"><h1>Colorful Maps Plugin</h1><p class="shortcode">Copy the shortcode to display map: <strong>[colorful_map]</strong></p></div>
     <div class="tab">
       <button class="tablinks" id="default-tab" onclick="openTab(event, 'general-settings')">General Settings</button>
       <button class="tablinks" onclick="openTab(event, 'marker-styles')">Marker Options</button>
